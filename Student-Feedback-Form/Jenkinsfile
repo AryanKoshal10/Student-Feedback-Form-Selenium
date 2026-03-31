@@ -5,19 +5,14 @@ pipeline {
 
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/AryanKoshal10/Student-Feedback-Form-Selenium/new/main/Student-Feedback-Form.git'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                bat 'pip install selenium'
+                git branch: 'main', url: 'https://github.com/AryanKoshal10/Student-Feedback-Form-Selenium.git'
             }
         }
 
         stage('Run Selenium Test') {
             steps {
-                bat 'python selenium_test.py'
+                bat 'cd Student-Feedback-Form && pip install selenium'
+                bat 'cd Student-Feedback-Form && python selenium_test.py'
             }
         }
     }
