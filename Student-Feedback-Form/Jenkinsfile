@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone Repo') {
+            steps {
+                git 'https://github.com/AryanKoshal10/Student-Feedback-Form-Selenium/new/main/Student-Feedback-Form.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'pip install selenium'
+            }
+        }
+
+        stage('Run Selenium Test') {
+            steps {
+                bat 'python selenium_test.py'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build Successful'
+        }
+        failure {
+            echo 'Build Failed'
+        }
+    }
+}
