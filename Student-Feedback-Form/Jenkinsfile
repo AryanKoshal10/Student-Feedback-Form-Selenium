@@ -1,28 +1,48 @@
 pipeline {
     agent any
 
+    triggers {
+        // Step 2: GitHub webhook trigger
+        githubPush()
+    }
+
     stages {
 
-        stage('Clone Repo') {
+        stage('Checkout Code') {
             steps {
+                // Step 4: Pull latest code
                 git branch: 'main', url: 'https://github.com/AryanKoshal10/Student-Feedback-Form-Selenium.git'
             }
         }
 
-        stage('Run Selenium Test') {
+        stage('Build Setup') {
             steps {
-                bat 'cd Student-Feedback-Form && pip install selenium'
-                bat 'cd Student-Feedback-Form && python selenium_test.py'
+                // Step 5 & 6: Install dependencies
+                dir('Student-Feedback-Form') {
+                    bat 'echo Installing dependencies...'
+                    bat 'pip install selenium'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                // Step 7: Execute selenium_test.py
+                dir('Student-Feedback-Form') {
+                    bat 'echo Running Selenium Tests...'
+                    bat 'python selenium_test.py'
+                }
             }
         }
     }
 
     post {
         success {
-            echo 'Build Successful'
+            // Step 8 & 9: Feedback
+            echo 'Build Successful - All tests passed'
         }
         failure {
-            echo 'Build Failed'
+            echo 'Build Failed - Check test cases'
         }
     }
 }
